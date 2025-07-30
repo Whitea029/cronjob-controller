@@ -1,0 +1,9 @@
+apiVersion: whitea.fun.whitea.fun/v1
+kind: CronJob
+metadata:
+  labels:
+    app.kubernetes.io/name: cronjob-controller
+    app.kubernetes.io/managed-by: kustomize
+  name: cronjob-sample
+spec:
+  # TODO(user): Add fields here
