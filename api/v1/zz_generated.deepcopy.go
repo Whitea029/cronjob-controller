@@ -98,8 +98,8 @@ func (in *CronJobSpec) DeepCopyInto(out *CronJobSpec) {
 		**out = **in
 	}
 	in.JobTemplate.DeepCopyInto(&out.JobTemplate)
-	if in.SuccessfulJobsHistoryLiit != nil {
-		in, out := &in.SuccessfulJobsHistoryLiit, &out.SuccessfulJobsHistoryLiit
+	if in.SuccessfulJobsHistoryLimit != nil {
+		in, out := &in.SuccessfulJobsHistoryLimit, &out.SuccessfulJobsHistoryLimit
 		*out = new(int32)
 		**out = **in
 	}
@@ -128,8 +128,8 @@ func (in *CronJobStatus) DeepCopyInto(out *CronJobStatus) {
 		*out = make([]corev1.ObjectReference, len(*in))
 		copy(*out, *in)
 	}
-	if in.LastScheduleTime != nil {
-		in, out := &in.LastScheduleTime, &out.LastScheduleTime
+	if in.LastScheduledTime != nil {
+		in, out := &in.LastScheduledTime, &out.LastScheduledTime
 		*out = (*in).DeepCopy()
 	}
 }

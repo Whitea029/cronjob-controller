@@ -59,7 +59,7 @@ type CronJobSpec struct {
 	// This is a pointer to distinguish between explicit zero and not specified.
 	// +optional
 	// +kubebuilder:validation:Minimum=0
-	SuccessfulJobsHistoryLiit *int32 `json:"successfulJobsHistoryLimit,omitempty"`
+	SuccessfulJobsHistoryLimit *int32 `json:"successfulJobsHistoryLimit,omitempty"`
 
 	// failedJobsHistoryLimit specifies the number of failed jobs to retain.
 	// This is a pointer to distinguish between explicit zero and not specified.
@@ -84,7 +84,7 @@ type CronJobStatus struct {
 
 	// lastScheduleTime is the last time the job was scheduled.
 	// +optional
-	LastScheduleTime *metav1.Time `json:"lastScheduleTime,omitempty"`
+	LastScheduledTime *metav1.Time `json:"lastScheduledTime,omitempty"`
 }
 
 // +kubebuilder:object:root=true
