@@ -71,7 +71,7 @@ type CronJobSpec struct {
 type ConcurrencyPolicy string
 
 const (
-	AllowCOncurrent   ConcurrencyPolicy = "Allow"
+	AllowConcurrent   ConcurrencyPolicy = "Allow"
 	ForbidConcurrent  ConcurrencyPolicy = "Forbid"
 	ReplaceConcurrent ConcurrencyPolicy = "Replace"
 )
