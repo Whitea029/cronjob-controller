@@ -1,4 +1,4 @@
 ## Append samples of your project ##
 resources:
-- whitea.fun_v1_cronjob.yaml
+- batch_v1_cronjob.yaml
 # +kubebuilder:scaffold:manifestskustomizesamples

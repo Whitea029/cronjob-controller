@@ -31,7 +31,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	whiteafunv1 "github.com/Whitea029/cronjob-controller/api/v1"
+	cronjobv1 "github.com/Whitea029/cronjob-controller/api/v1"
 	"github.com/robfig/cron"
 )
 
@@ -53,12 +53,12 @@ type Clock interface {
 }
 
 var (
-	scheduledTimeAnnotation = "batch.tutorial.kubebuilder.io/scheduled-at"
+	scheduledTimeAnnotation = "batch.whitea.com/scheduled-at"
 )
 
-// +kubebuilder:rbac:groups=whitea.fun.whitea.fun,resources=cronjobs,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=whitea.fun.whitea.fun,resources=cronjobs/status,verbs=get;update;patch
-// +kubebuilder:rbac:groups=whitea.fun.whitea.fun,resources=cronjobs/finalizers,verbs=update
+// +kubebuilder:rbac:groups=batch.whitea.com,resources=cronjobs,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=batch.whitea.com,resources=cronjobs/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=batch.whitea.com,resources=cronjobs/finalizers,verbs=update
 // +kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=batch,resources=jobs/status,verbs=get
 
@@ -72,7 +72,7 @@ var (
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.21.0/pkg/reconcile
 func (r *CronJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	var cronjob whiteafunv1.CronJob
+	var cronjob cronjobv1.CronJob
 	if err := r.Client.Get(ctx, req.NamespacedName, &cronjob); err != nil {
 		klog.Errorf("unable to fetch CronJob %s: %v", req.NamespacedName, err)
 		return ctrl.Result{}, client.IgnoreNotFound(err)
@@ -204,10 +204,10 @@ func (r *CronJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		return scheduledResult, nil
 	}
 
-	if cronjob.Spec.ConcurrencyPolicy == whiteafunv1.ForbidConcurrent && len(activeJobs) > 0 {
+	if cronjob.Spec.ConcurrencyPolicy == cronjobv1.ForbidConcurrent && len(activeJobs) > 0 {
 		klog.Infof("Skipping missed run for CronJob %s at %s due to ForbidConcurrent policy", req.NamespacedName, missedRun)
 		return scheduledResult, nil
-	} else if cronjob.Spec.ConcurrencyPolicy == whiteafunv1.ReplaceConcurrent && len(activeJobs) > 0 {
+	} else if cronjob.Spec.ConcurrencyPolicy == cronjobv1.ReplaceConcurrent && len(activeJobs) > 0 {
 		for _, activeJob := range activeJobs {
 			if err := r.Delete(ctx, activeJob, client.PropagationPolicy(metav1.DeletePropagationBackground)); client.IgnoreNotFound(err) != nil {
 				klog.Errorf("unable to delete active Job %s for CronJob %s: %v", activeJob.Name, req.NamespacedName, err)
@@ -231,7 +231,7 @@ func (r *CronJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	return scheduledResult, nil
 }
 
-func constructJobForCronJob(cronJob *whiteafunv1.CronJob, scheduledTime time.Time, schema *runtime.Scheme) (*batchv1.Job, error) {
+func constructJobForCronJob(cronJob *cronjobv1.CronJob, scheduledTime time.Time, schema *runtime.Scheme) (*batchv1.Job, error) {
 	name := fmt.Sprintf("%s-%d", cronJob.Name, scheduledTime.Unix())
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
@@ -276,7 +276,7 @@ func getScheduledTimeForJob(job *batchv1.Job) (*time.Time, error) {
 	return &timeParsed, nil
 }
 
-func getNextScheduledTime(cronjob *whiteafunv1.CronJob, now time.Time) (lastMissTime, nextTime time.Time, err error) {
+func getNextScheduledTime(cronjob *cronjobv1.CronJob, now time.Time) (lastMissTime, nextTime time.Time, err error) {
 	sched, err := cron.ParseStandard(cronjob.Spec.Schedule)
 	if err != nil {
 		return time.Time{}, time.Time{}, fmt.Errorf("unparseable schedule %q: %w", cronjob.Spec.Schedule, err)
@@ -331,12 +331,12 @@ func (r *CronJobReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		return err
 	}
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&whiteafunv1.CronJob{}).
+		For(&cronjobv1.CronJob{}).
 		Named("cronjob").
 		Complete(r)
 }
 
 var (
 	jobOwnerKey = ".metadata.controller"
-	apiGVStr    = whiteafunv1.GroupVersion.String()
+	apiGVStr    = cronjobv1.GroupVersion.String()
 )

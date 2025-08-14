@@ -30,7 +30,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 
-	whiteafunv1 "github.com/Whitea029/cronjob-controller/api/v1"
+	cronjobv1 "github.com/Whitea029/cronjob-controller/api/v1"
 	"github.com/robfig/cron"
 )
 
@@ -40,10 +40,10 @@ var cronjoblog = logf.Log.WithName("cronjob-resource")
 
 // SetupCronJobWebhookWithManager registers the webhook for CronJob in the manager.
 func SetupCronJobWebhookWithManager(mgr ctrl.Manager) error {
-	return ctrl.NewWebhookManagedBy(mgr).For(&whiteafunv1.CronJob{}).
+	return ctrl.NewWebhookManagedBy(mgr).For(&cronjobv1.CronJob{}).
 		WithValidator(&CronJobCustomValidator{}).
 		WithDefaulter(&CronJobCustomDefaulter{
-			DefaultConcurrencyPolicy:          whiteafunv1.AllowConcurrent,
+			DefaultConcurrencyPolicy:          cronjobv1.AllowConcurrent,
 			DefaultSuspend:                    false,
 			DefaultSuccessfulJobsHistoryLimit: 3,
 			DefaultFailedJobsHistoryLimit:     1,
@@ -53,7 +53,7 @@ func SetupCronJobWebhookWithManager(mgr ctrl.Manager) error {
 
 // TODO(user): EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 
-// +kubebuilder:webhook:path=/mutate-whitea-fun-whitea-fun-v1-cronjob,mutating=true,failurePolicy=fail,sideEffects=None,groups=whitea.fun.whitea.fun,resources=cronjobs,verbs=create;update,versions=v1,name=mcronjob-v1.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/mutate-batch-whitea-fun-v1-cronjob,mutating=true,failurePolicy=fail,sideEffects=None,groups=batch.whitea.fun,resources=cronjobs,verbs=create;update,versions=v1,name=mcronjob-v1.kb.io,admissionReviewVersions=v1
 
 // CronJobCustomDefaulter struct is responsible for setting default values on the custom resource of the
 // Kind CronJob when those are created or updated.
@@ -62,7 +62,7 @@ func SetupCronJobWebhookWithManager(mgr ctrl.Manager) error {
 // as it is used only for temporary operations and does not need to be deeply copied.
 type CronJobCustomDefaulter struct {
 	// Default values for various CronJob fields
-	DefaultConcurrencyPolicy          whiteafunv1.ConcurrencyPolicy
+	DefaultConcurrencyPolicy          cronjobv1.ConcurrencyPolicy
 	DefaultSuspend                    bool
 	DefaultSuccessfulJobsHistoryLimit int32
 	DefaultFailedJobsHistoryLimit     int32
@@ -72,7 +72,7 @@ var _ webhook.CustomDefaulter = &CronJobCustomDefaulter{}
 
 // Default implements webhook.CustomDefaulter so a webhook will be registered for the Kind CronJob.
 func (d *CronJobCustomDefaulter) Default(_ context.Context, obj runtime.Object) error {
-	cronjob, ok := obj.(*whiteafunv1.CronJob)
+	cronjob, ok := obj.(*cronjobv1.CronJob)
 
 	if !ok {
 		return fmt.Errorf("expected an CronJob object but got %T", obj)
@@ -84,7 +84,7 @@ func (d *CronJobCustomDefaulter) Default(_ context.Context, obj runtime.Object) 
 	return nil
 }
 
-func (d *CronJobCustomDefaulter) applyDefaults(cronJob *whiteafunv1.CronJob) {
+func (d *CronJobCustomDefaulter) applyDefaults(cronJob *cronjobv1.CronJob) {
 	if cronJob.Spec.ConcurrencyPolicy == "" {
 		cronJob.Spec.ConcurrencyPolicy = d.DefaultConcurrencyPolicy
 	}
@@ -105,7 +105,7 @@ func (d *CronJobCustomDefaulter) applyDefaults(cronJob *whiteafunv1.CronJob) {
 // TODO(user): change verbs to "verbs=create;update;delete" if you want to enable deletion validation.
 // NOTE: The 'path' attribute must follow a specific pattern and should not be modified directly here.
 // Modifying the path for an invalid path can cause API server errors; failing to locate the webhook.
-// +kubebuilder:webhook:path=/validate-whitea-fun-whitea-fun-v1-cronjob,mutating=false,failurePolicy=fail,sideEffects=None,groups=whitea.fun.whitea.fun,resources=cronjobs,verbs=create;update,versions=v1,name=vcronjob-v1.kb.io,admissionReviewVersions=v1
+// +kubebuilder:webhook:path=/validate-batch-whitea-fun-v1-cronjob,mutating=false,failurePolicy=fail,sideEffects=None,groups=batch.whitea.fun,resources=cronjobs,verbs=create;update,versions=v1,name=vcronjob-v1.kb.io,admissionReviewVersions=v1
 
 // CronJobCustomValidator struct is responsible for validating the CronJob resource
 // when it is created, updated, or deleted.
@@ -120,7 +120,7 @@ var _ webhook.CustomValidator = &CronJobCustomValidator{}
 
 // ValidateCreate implements webhook.CustomValidator so a webhook will be registered for the type CronJob.
 func (v *CronJobCustomValidator) ValidateCreate(_ context.Context, obj runtime.Object) (admission.Warnings, error) {
-	cronjob, ok := obj.(*whiteafunv1.CronJob)
+	cronjob, ok := obj.(*cronjobv1.CronJob)
 	if !ok {
 		return nil, fmt.Errorf("expected a CronJob object but got %T", obj)
 	}
@@ -131,7 +131,7 @@ func (v *CronJobCustomValidator) ValidateCreate(_ context.Context, obj runtime.O
 
 // ValidateUpdate implements webhook.CustomValidator so a webhook will be registered for the type CronJob.
 func (v *CronJobCustomValidator) ValidateUpdate(_ context.Context, oldObj, newObj runtime.Object) (admission.Warnings, error) {
-	cronjob, ok := newObj.(*whiteafunv1.CronJob)
+	cronjob, ok := newObj.(*cronjobv1.CronJob)
 	if !ok {
 		return nil, fmt.Errorf("expected a CronJob object for the newObj but got %T", newObj)
 	}
@@ -142,7 +142,7 @@ func (v *CronJobCustomValidator) ValidateUpdate(_ context.Context, oldObj, newOb
 
 // ValidateDelete implements webhook.CustomValidator so a webhook will be registered for the type CronJob.
 func (v *CronJobCustomValidator) ValidateDelete(ctx context.Context, obj runtime.Object) (admission.Warnings, error) {
-	cronjob, ok := obj.(*whiteafunv1.CronJob)
+	cronjob, ok := obj.(*cronjobv1.CronJob)
 	if !ok {
 		return nil, fmt.Errorf("expected a CronJob object but got %T", obj)
 	}
@@ -154,7 +154,7 @@ func (v *CronJobCustomValidator) ValidateDelete(ctx context.Context, obj runtime
 }
 
 // validateCronJob validates the fields of a CronJob object.
-func validateCronJob(cronjob *whiteafunv1.CronJob) error {
+func validateCronJob(cronjob *cronjobv1.CronJob) error {
 	var allErrs field.ErrorList
 	if err := validateCronJobName(cronjob); err != nil {
 		allErrs = append(allErrs, err)
@@ -167,11 +167,11 @@ func validateCronJob(cronjob *whiteafunv1.CronJob) error {
 	}
 
 	return apierrors.NewInvalid(
-		schema.GroupKind{Group: "batch.tutorial.kubebuilder.io", Kind: "CronJob"},
+		schema.GroupKind{Group: "batch.whitea.fun", Kind: "CronJob"},
 		cronjob.Name, allErrs)
 }
 
-func validateCronJobSpec(cronjob *whiteafunv1.CronJob) *field.Error {
+func validateCronJobSpec(cronjob *cronjobv1.CronJob) *field.Error {
 	// The field helpers from the kubernetes API machinery help us return nicely
 	// structured validation errors.
 	return validateScheduleFormat(
@@ -186,7 +186,7 @@ func validateScheduleFormat(schedule string, fldPath *field.Path) *field.Error {
 	return nil
 }
 
-func validateCronJobName(cronjob *whiteafunv1.CronJob) *field.Error {
+func validateCronJobName(cronjob *cronjobv1.CronJob) *field.Error {
 	if len(cronjob.Name) > validationutils.DNS1035LabelMaxLength-11 {
 		// The job name length is 63 characters like all Kubernetes objects
 		// (which must fit in a DNS subdomain). The cronjob controller appends

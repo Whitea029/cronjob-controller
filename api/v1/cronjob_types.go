@@ -36,7 +36,6 @@ type CronJobSpec struct {
 	// it misses scheduled time for any reason.
 	// It will prevent starting the job if it misses the deadline.
 	// +optional
-	// +kubebuilder:validation:Minimum=0
 	StartingDeadlineSeconds *int32 `json:"startingDeadlineSeconds,omitempty"`
 
 	// concurrencyPolicy specifies how to treat concurrent executions of a Job.

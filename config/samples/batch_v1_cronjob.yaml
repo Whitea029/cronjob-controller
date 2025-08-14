@@ -1,4 +1,4 @@
-apiVersion: whitea.fun.whitea.fun/v1
+apiVersion: batch.whitea.com/v1
 kind: CronJob
 metadata:
   labels:

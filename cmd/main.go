@@ -37,7 +37,7 @@ import (
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	whiteafunv1 "github.com/Whitea029/cronjob-controller/api/v1"
+	batchv1 "github.com/Whitea029/cronjob-controller/api/v1"
 	"github.com/Whitea029/cronjob-controller/internal/controller"
 	webhookv1 "github.com/Whitea029/cronjob-controller/internal/webhook/v1"
 	// +kubebuilder:scaffold:imports
@@ -51,7 +51,7 @@ var (
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
-	utilruntime.Must(whiteafunv1.AddToScheme(scheme))
+	utilruntime.Must(batchv1.AddToScheme(scheme))
 	// +kubebuilder:scaffold:scheme
 }
 
@@ -185,7 +185,7 @@ func main() {
 		WebhookServer:          webhookServer,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "28e8a5fe.whitea.fun",
+		LeaderElectionID:       "3f130a5e.whitea.com",
 		// LeaderElectionReleaseOnCancel defines if the leader should step down voluntarily
 		// when the Manager ends. This requires the binary to immediately end when the
 		// Manager is stopped, otherwise, this setting is unsafe. Setting this significantly

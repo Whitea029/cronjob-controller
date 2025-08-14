@@ -27,7 +27,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	whiteafunv1 "github.com/Whitea029/cronjob-controller/api/v1"
+	batchv1 "github.com/Whitea029/cronjob-controller/api/v1"
 )
 
 var _ = Describe("CronJob Controller", func() {
@@ -40,13 +40,13 @@ var _ = Describe("CronJob Controller", func() {
 			Name:      resourceName,
 			Namespace: "default", // TODO(user):Modify as needed
 		}
-		cronjob := &whiteafunv1.CronJob{}
+		cronjob := &batchv1.CronJob{}
 
 		BeforeEach(func() {
 			By("creating the custom resource for the Kind CronJob")
 			err := k8sClient.Get(ctx, typeNamespacedName, cronjob)
 			if err != nil && errors.IsNotFound(err) {
-				resource := &whiteafunv1.CronJob{
+				resource := &batchv1.CronJob{
 					ObjectMeta: metav1.ObjectMeta{
 						Name:      resourceName,
 						Namespace: "default",
@@ -59,7 +59,7 @@ var _ = Describe("CronJob Controller", func() {
 
 		AfterEach(func() {
 			// TODO(user): Cleanup logic after each test, like removing the resource instance.
-			resource := &whiteafunv1.CronJob{}
+			resource := &batchv1.CronJob{}
 			err := k8sClient.Get(ctx, typeNamespacedName, resource)
 			Expect(err).NotTo(HaveOccurred())
 

@@ -23,7 +23,7 @@ rules:
   verbs:
   - get
 - apiGroups:
-  - whitea.fun.whitea.fun
+  - batch.whitea.com
   resources:
   - cronjobs
   verbs:
@@ -35,13 +35,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - whitea.fun.whitea.fun
+  - batch.whitea.com
   resources:
   - cronjobs/finalizers
   verbs:
   - update
 - apiGroups:
-  - whitea.fun.whitea.fun
+  - batch.whitea.com
   resources:
   - cronjobs/status
   verbs:

@@ -20,21 +20,21 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	whiteafunv1 "github.com/Whitea029/cronjob-controller/api/v1"
+	batchv1 "github.com/Whitea029/cronjob-controller/api/v1"
 	// TODO (user): Add any additional imports if needed
 )
 
 var _ = Describe("CronJob Webhook", func() {
 	var (
-		obj       *whiteafunv1.CronJob
-		oldObj    *whiteafunv1.CronJob
+		obj       *batchv1.CronJob
+		oldObj    *batchv1.CronJob
 		validator CronJobCustomValidator
 		defaulter CronJobCustomDefaulter
 	)
 
 	BeforeEach(func() {
-		obj = &whiteafunv1.CronJob{}
-		oldObj = &whiteafunv1.CronJob{}
+		obj = &batchv1.CronJob{}
+		oldObj = &batchv1.CronJob{}
 		validator = CronJobCustomValidator{}
 		Expect(validator).NotTo(BeNil(), "Expected validator to be initialized")
 		defaulter = CronJobCustomDefaulter{}

@@ -1,7 +1,7 @@
 # This rule is not used by the project cronjob-controller itself.
 # It is provided to allow the cluster admin to help manage permissions for users.
 #
-# Grants read-only access to whitea.fun.whitea.fun resources.
+# Grants read-only access to batch.whitea.com resources.
 # This role is intended for users who need visibility into these resources
 # without permissions to modify them. It is ideal for monitoring purposes and limited-access viewing.
 
@@ -14,7 +14,7 @@ metadata:
   name: cronjob-viewer-role
 rules:
 - apiGroups:
-  - whitea.fun.whitea.fun
+  - batch.whitea.com
   resources:
   - cronjobs
   verbs:
@@ -22,7 +22,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - whitea.fun.whitea.fun
+  - batch.whitea.com
   resources:
   - cronjobs/status
   verbs:
